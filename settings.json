@@ -1,0 +1,36 @@
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/generate_handoff.py",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/pre_commit_docs_check.py",
+            "timeout": 120
+          },
+          {
+            "type": "prompt",
+            "prompt": "이 명령이 git commit이 아니면 무조건 허용해. git commit이라면 staged된 src/docs/ 하위 문서들을 읽고 다음을 검증해: 1) 기능명세서에 API 엔드포인트, Request/Response 구조, 에러 응답 코드가 있는지 2) 아키텍처 설명서에 컴포넌트 간 흐름 설명이 있는지 3) 사용자매뉴얼에 화면별 사용법이 있는지. 내용이 부실하면 deny하고 구체적으로 뭘 보완해야 하는지 알려줘. 한국어로 응답해.",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": true,
+    "feature-dev@claude-plugins-official": true
+  }
+}
